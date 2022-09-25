@@ -2,17 +2,19 @@
 #include <stdint.h>
 // #include <iostream>
 
+
+// bit fields till compiler how many bits to hold
 typedef struct
 {
     /* data */
-    uint8_t crc; // 2 bits
-    uint8_t status; // 1 bit
-    uint16_t payload; // 12 bits
-    uint8_t bat; // 3 bits
-    uint8_t sensor; // 3 bits 
-    uint8_t longAddr; // 8 bits long
-    uint8_t shortAddr; // 2 bits short
-    uint8_t addrMode; // 1 bit char
+    uint32_t crc:2; // 2 bits
+    uint32_t status:1; // 1 bit
+    uint32_t payload:12; // 12 bits
+    uint32_t bat:3; // 3 bits
+    uint32_t sensor:3; // 3 bits 
+    uint32_t longAddr:8; // 8 bits long
+    uint32_t shortAddr:2; // 2 bits short
+    uint32_t addrMode:1; // 1 bit char
 } Packet_t;
 
 
@@ -30,14 +32,14 @@ int main(void)
     uint32_t packet_input;
     scanf("%X", &packet_input);
 
-    packet.crc = (uint8_t)(packet_input & 0x3); // first 2 bits
-    packet.status = (uint8_t)((packet_input >> 2) & 0x1); // 3rd bit
-    packet.payload = (uint16_t)((packet_input >> 3) & 0xFFF); // next 12 bits
-    packet.bat = (uint8_t)((packet_input >> 15) & 0x7); // next 3 bits
-    packet.sensor = (uint8_t)((packet_input >> 18) & 0x7); // next 3 bits
-    packet.longAddr = (uint8_t)((packet_input >> 21) & 0xFF); // next 8 bits
-    packet.shortAddr = (uint8_t)((packet_input >> 29) & 0x3); // next 2 bits
-    packet.addrMode = (uint8_t)((packet_input >> 31) & 0x1); // last bit
+    packet.crc = (uint32_t)(packet_input & 0x3); // first 2 bits
+    packet.status = (uint32_t)((packet_input >> 2) & 0x1); // 3rd bit
+    packet.payload = (uint32_t)((packet_input >> 3) & 0xFFF); // next 12 bits
+    packet.bat = (uint32_t)((packet_input >> 15) & 0x7); // next 3 bits
+    packet.sensor = (uint32_t)((packet_input >> 18) & 0x7); // next 3 bits
+    packet.longAddr = (uint32_t)((packet_input >> 21) & 0xFF); // next 8 bits
+    packet.shortAddr = (uint32_t)((packet_input >> 29) & 0x3); // next 2 bits
+    packet.addrMode = (uint32_t)((packet_input >> 31) & 0x1); // last bit
 
 
     // uint32_t totalSize = sizeof(Packet_t);
@@ -85,7 +87,7 @@ int main(void)
 
     uint32_t totalSize = sizeof(packet_input); // 4 bytes
     uint32_t totalStructSize = sizeof(Packet_t); // 10 bytes
-    printf("Size of struct packet = %d bytes\n", totalStructSize);
+    printf("Size of struct packet = %d bytes\n", totalSize);
 
     return 0;
 }
